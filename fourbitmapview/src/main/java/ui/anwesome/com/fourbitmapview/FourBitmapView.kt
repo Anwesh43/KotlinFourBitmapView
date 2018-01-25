@@ -95,4 +95,29 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             }
         }
     }
+    data class Animator(var view:FourBitmapView,var animated:Boolean = false) {
+        fun animate(updatecb:()->Unit) {
+            if(animated) {
+                updatecb()
+                try {
+                    Thread.sleep(50)
+                    view.invalidate()
+                }
+                catch(ex:Exception) {
+
+                }
+            }
+        }
+        fun start() {
+            if(!animated) {
+                animated = true
+                view.postInvalidate()
+            }
+        }
+        fun stop() {
+            if(animated) {
+                animated = false
+            }
+        }
+    }
 }
