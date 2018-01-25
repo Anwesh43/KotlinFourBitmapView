@@ -10,14 +10,15 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 val colors:Array<String> = arrayOf("f44336","673AB7","006064","0288D1")
 class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
+    val renderer = Renderer(this)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     override fun onDraw(canvas:Canvas) {
-
+        renderer.render(canvas,paint)
     }
     override fun onTouchEvent(event:MotionEvent):Boolean {
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
