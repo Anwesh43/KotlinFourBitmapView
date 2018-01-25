@@ -3,6 +3,7 @@ package ui.anwesome.com.fourbitmapview
 /**
  * Created by anweshmishra on 25/01/18.
  */
+import android.app.Activity
 import android.content.*
 import android.graphics.*
 import android.view.*
@@ -143,6 +144,13 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             container?.startUpdating {
                 animator.start()
             }
+        }
+    }
+    companion object {
+        fun create(activity:Activity,bitmap:Bitmap):FourBitmapView {
+            val view = FourBitmapView(activity,bitmap)
+            activity.setContentView(view)
+            return view
         }
     }
 }
