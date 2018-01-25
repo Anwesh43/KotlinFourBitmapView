@@ -27,10 +27,10 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     data class SideBitmap(var i:Int) {
         fun draw(canvas:Canvas,paint:Paint, bitmap:Bitmap, w:Float, h:Float, scale1:Float,scale2:Float) {
             paint.style = Paint.Style.FILL
-            val x = w/2*(i%2) +w/4
-            val y = h/2*(i/2)+w/4
-            val px = w/2*(i%2)
-            val py = h/2*(i/2)
+            val x = w/2*(i%2) + w/4
+            val y = h/2*(i/2)+ h/4
+            val px = w*(i%2)
+            val py = h*(i/2)
             val dx = px + (w/2-px)*scale2
             val dy = py + (h/2-py)*scale2
             canvas.save()
@@ -38,7 +38,7 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             paint.color = Color.BLACK
             canvas.drawBitmap(bitmap,-w/4,-h/4,paint)
             canvas.restore()
-            paint.color = Color.parseColor("#AA${colors[i]}")
+            paint.color = Color.parseColor("#88${colors[i]}")
             canvas.save()
             val path = Path()
             path.moveTo(px,py)
