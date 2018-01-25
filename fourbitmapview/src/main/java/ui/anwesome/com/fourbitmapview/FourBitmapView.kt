@@ -6,6 +6,8 @@ package ui.anwesome.com.fourbitmapview
 import android.content.*
 import android.graphics.*
 import android.view.*
+import java.util.concurrent.ConcurrentLinkedQueue
+
 val colors:Array<String> = arrayOf("f44336","673AB7","006064","0288D1")
 class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -44,6 +46,26 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             path.lineTo(px,py)
             canvas.drawPath(path,paint)
             canvas.restore()
+        }
+    }
+    data class SideBitmapContainer(var bitmap:Bitmap,var w:Float,var h:Float) {
+        val bitmapList:ConcurrentLinkedQueue<SideBitmap> = ConcurrentLinkedQueue()
+        init {
+            bitmap = Bitmap.createScaledBitmap(bitmap,(w/2).toInt(),(h/2).toInt(),true)
+            for(i in 0..3) {
+                bitmapList.add(SideBitmap(i))
+            }
+        }
+        fun draw(canvas:Canvas,paint:Paint) {
+            bitmapList.forEach {
+                it.draw(canvas,paint,bitmap,w,h,0f,0f)
+            }
+        }
+        fun update(stopcb:(Float)->Unit) {
+
+        }
+        fun startUpdating(startcb:()->Unit) {
+
         }
     }
 }
