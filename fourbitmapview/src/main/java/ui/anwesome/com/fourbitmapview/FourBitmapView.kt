@@ -59,6 +59,7 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         }
         fun draw(canvas:Canvas,paint:Paint) {
             if(state.scales.size == 2) {
+                canvas.drawColor(Color.parseColor("#212121"))
                 bitmapList.forEach {
                     it.draw(canvas, paint, bitmap, w, h, state.scales[0], state.scales[1])
                 }
@@ -117,6 +118,29 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         fun stop() {
             if(animated) {
                 animated = false
+            }
+        }
+    }
+    data class Renderer(var view:FourBitmapView,var time:Int = 0) {
+        var container:SideBitmapContainer?=null
+        val animator = Animator(view)
+        fun render(canvas:Canvas,paint:Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                container = SideBitmapContainer(view.bitmap,w,h)
+            }
+            container?.draw(canvas,paint)
+            time++
+            animator.animate {
+                container?.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            container?.startUpdating {
+                animator.start()
             }
         }
     }
