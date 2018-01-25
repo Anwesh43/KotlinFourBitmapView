@@ -49,6 +49,7 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         }
     }
     data class SideBitmapContainer(var bitmap:Bitmap,var w:Float,var h:Float) {
+        val state = SideBitmapContainerState()
         val bitmapList:ConcurrentLinkedQueue<SideBitmap> = ConcurrentLinkedQueue()
         init {
             bitmap = Bitmap.createScaledBitmap(bitmap,(w/2).toInt(),(h/2).toInt(),true)
@@ -57,15 +58,17 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             }
         }
         fun draw(canvas:Canvas,paint:Paint) {
-            bitmapList.forEach {
-                it.draw(canvas,paint,bitmap,w,h,0f,0f)
+            if(state.scales.size == 2) {
+                bitmapList.forEach {
+                    it.draw(canvas, paint, bitmap, w, h, state.scales[0], state.scales[1])
+                }
             }
         }
         fun update(stopcb:(Float)->Unit) {
-
+            state.update(stopcb)
         }
         fun startUpdating(startcb:()->Unit) {
-
+            state.startUpdating(startcb)
         }
     }
     data class SideBitmapContainerState(var dir:Int = 1,var scaleDir:Float = 0f,var prevScale:Float = 0f,var j:Int = 0) {
