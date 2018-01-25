@@ -68,4 +68,28 @@ class FourBitmapView(ctx:Context,var bitmap:Bitmap):View(ctx) {
 
         }
     }
+    data class SideBitmapContainerState(var dir:Int = 1,var scaleDir:Float = 0f,var prevScale:Float = 0f,var j:Int = 0) {
+        val scales:Array<Float> = arrayOf(0f,0f)
+        fun update(stopcb:(Float)->Unit) {
+            scales[j] += 0.1f*scaleDir
+            if(Math.abs(scales[j] - prevScale) > 1) {
+                scales[j] = prevScale + scaleDir
+                j += dir
+                if(j == scales.size || j == -1) {
+                    dir*=-1
+                    j += dir
+                    prevScale = scales[j]
+                    scaleDir = 0f
+                    stopcb(scales[j])
+                }
+
+            }
+        }
+        fun startUpdating(startcb:()->Unit) {
+            if(scaleDir == 0f) {
+                scaleDir = 1-2*this.prevScale
+                startcb()
+            }
+        }
+    }
 }
